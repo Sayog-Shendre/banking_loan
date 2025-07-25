@@ -132,7 +132,7 @@ Monthly EMI = ₹2,708.33
 
 ```
 banking_loan/
-├── index.html
+├── ht.html
 ├── README.md
 └── assets/
     ├── screenshots/
