@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Lending System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 5px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            margin: 0 5px;
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .nav-tab.active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .content-section {
+            display: none;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #fafbfc;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: #f8f9fc;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .card p {
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2d3436;
+        }
+
+        .success {
+            color: #00b894;
+        }
+
+        .error {
+            color: #e17055;
+        }
+
+        .warning {
+            color: #fdcb6e;
+        }
+
+        .info {
+            color: #74b9ff;
+        }
+
+        .alert {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-info {
+            background: #cce7ff;
+            color: #004085;
+            border: 1px solid #b3d9ff;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .table th,
+        .table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e1e5e9;
+        }
+
+        .table th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 14px;
+        }
+
+        .table tr:hover {
+            background: #f8f9fc;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.05);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge.info {
+            background: #cce7ff;
+            color: #004085;
+        }
+
+        .badge.warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-tabs {
+                flex-wrap: wrap;
+            }
+
+            .nav-tab {
+                margin: 5px;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏦 Bank Lending System</h1>
+            <p>Comprehensive loan management and tracking solution</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('create-loan')">Create Loan</button>
+            <button class="nav-tab" onclick="switchTab('make-payment')">Make Payment</button>
+            <button class="nav-tab" onclick="switchTab('view-ledger')">View Ledger</button>
+            <button class="nav-tab" onclick="switchTab('customer-overview')">Customer Overview</button>
+        </div>
+
+        <!-- Create Loan Section -->
+        <div id="create-loan" class="content-section active">
+            <div class="alert alert-info" style="margin-bottom: 20px;">
+                <strong>Welcome to the Bank Lending System!</strong><br>
+                • Use sample Customer IDs: <strong>CUST001</strong> or <strong>CUST002</strong><br>
+                • Try creating a loan first, then make payments and view the ledger<br>
+                • All data is stored in memory and will reset on page refresh
+            </div>
+            <h2>Create New Loan</h2>
+            <form id="create-loan-form">
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="customer_id">Customer ID:</label>
+                        <input type="text" id="customer_id" name="customer_id" required placeholder="Enter customer ID">
+                    </div>
+                    <div class="form-group">
+                        <label for="loan_amount">Loan Amount (₹):</label>
+                        <input type="number" id="loan_amount" name="loan_amount" required min="1000" step="0.01" placeholder="100000">
+                    </div>
+                    <div class="form-group">
+                        <label for="loan_period_years">Loan Period (Years):</label>
+                        <input type="number" id="loan_period_years" name="loan_period_years" required min="1" max="30" placeholder="5">
+                    </div>
+                    <div class="form-group">
+                        <label for="interest_rate_yearly">Interest Rate (% per year):</label>
+                        <input type="number" id="interest_rate_yearly" name="interest_rate_yearly" required min="0.1" max="50" step="0.1" placeholder="12.5">
+                    </div>
+                </div>
+                <button type="submit" class="btn">Create Loan</button>
+            </form>
+            <div id="loan-result"></div>
+        </div>
+
+        <!-- Make Payment Section -->
+        <div id="make-payment" class="content-section">
+            <h2>Make Payment</h2>
+            <form id="payment-form">
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="payment_loan_id">Loan ID:</label>
+                        <input type="text" id="payment_loan_id" name="loan_id" required placeholder="Enter loan ID">
+                    </div>
+                    <div class="form-group">
+                        <label for="payment_amount">Payment Amount (₹):</label>
+                        <input type="number" id="payment_amount" name="amount" required min="1" step="0.01" placeholder="5000">
+                    </div>
+                    <div class="form-group">
+                        <label for="payment_type">Payment Type:</label>
+                        <select id="payment_type" name="payment_type" required>
+                            <option value="EMI">EMI Payment</option>
+                            <option value="LUMP_SUM">Lump Sum Payment</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn">Record Payment</button>
+            </form>
+            <div id="payment-result"></div>
+        </div>
+
+        <!-- View Ledger Section -->
+        <div id="view-ledger" class="content-section">
+            <h2>View Loan Ledger</h2>
+            <form id="ledger-form">
+                <div class="form-group">
+                    <label for="ledger_loan_id">Loan ID:</label>
+                    <input type="text" id="ledger_loan_id" name="loan_id" required placeholder="Enter loan ID">
+                </div>
+                <button type="submit" class="btn btn-secondary">Get Ledger</button>
+            </form>
+            <div id="ledger-result"></div>
+        </div>
+
+        <!-- Customer Overview Section -->
+        <div id="customer-overview" class="content-section">
+            <h2>Customer Overview</h2>
+            <form id="overview-form">
+                <div class="form-group">
+                    <label for="overview_customer_id">Customer ID:</label>
+                    <input type="text" id="overview_customer_id" name="customer_id" required placeholder="Enter customer ID">
+                </div>
+                <button type="submit" class="btn btn-secondary">Get Overview</button>
+            </form>
+            <div id="overview-result"></div>
+        </div>
+    </div>
+
+    <script>
+        // Mock API and Data Storage
+        class BankLendingAPI {
+            constructor() {
+                this.customers = new Map();
+                this.loans = new Map();
+                this.payments = new Map();
+                this.initializeData();
+            }
+
+            initializeData() {
+                // Add some sample customers
+                this.customers.set('CUST001', {
+                    customer_id: 'CUST001',
+                    name: 'John Doe',
+                    created_at: new Date().toISOString()
+                });
+                this.customers.set('CUST002', {
+                    customer_id: 'CUST002',
+                    name: 'Jane Smith',
+                    created_at: new Date().toISOString()
+                });
+            }
+
+            generateId(prefix = '') {
+                return prefix + Math.random().toString(36).substr(2, 9).toUpperCase();
+            }
+
+            // Calculate loan details using simple interest
+            calculateLoanDetails(principal, years, rate) {
+                const totalInterest = principal * years * (rate / 100);
+                const totalAmount = principal + totalInterest;
+                const monthlyEMI = totalAmount / (years * 12);
+
+                return {
+                    totalInterest,
+                    totalAmount,
+                    monthlyEMI
+                };
+            }
+
+            // API Methods
+            async createLoan(loanData) {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        try {
+                            const {
+                                customer_id,
+                                loan_amount,
+                                loan_period_years,
+                                interest_rate_yearly
+                            } = loanData;
+
+                            // Validate customer exists (or create if not exists)
+                            if (!this.customers.has(customer_id)) {
+                                this.customers.set(customer_id, {
+                                    customer_id,
+                                    name: `Customer ${customer_id}`,
+                                    created_at: new Date().toISOString()
+                                });
+                            }
+
+                            const loanId = this.generateId('LOAN');
+                            const calculations = this.calculateLoanDetails(
+                                parseFloat(loan_amount),
+                                parseInt(loan_period_years),
+                                parseFloat(interest_rate_yearly)
+                            );
+
+                            const loan = {
+                                loan_id: loanId,
+                                customer_id,
+                                principal_amount: parseFloat(loan_amount),
+                                total_amount: calculations.totalAmount,
+                                total_interest: calculations.totalInterest,
+                                interest_rate: parseFloat(interest_rate_yearly),
+                                loan_period_years: parseInt(loan_period_years),
+                                monthly_emi: calculations.monthlyEMI,
+                                status: 'ACTIVE',
+                                created_at: new Date().toISOString(),
+                                amount_paid: 0,
+                                balance_amount: calculations.totalAmount
+                            };
+
+                            this.loans.set(loanId, loan);
+
+                            resolve({
+                                loan_id: loanId,
+                                customer_id,
+                                total_amount_payable: calculations.totalAmount,
+                                monthly_emi: calculations.monthlyEMI
+                            });
+                        } catch (error) {
+                            reject({
+                                error: 'Failed to create loan',
+                                details: error.message
+                            });
+                        }
+                    }, 500);
+                });
+            }
+
+            async makePayment(loanId, paymentData) {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        try {
+                            const loan = this.loans.get(loanId);
+                            if (!loan) {
+                                reject({
+                                    error: 'Loan not found',
+                                    status: 404
+                                });
+                                return;
+                            }
+
+                            const paymentId = this.generateId('PAY');
+                            const payment = {
+                                payment_id: paymentId,
+                                loan_id: loanId,
+                                amount: parseFloat(paymentData.amount),
+                                payment_type: paymentData.payment_type,
+                                payment_date: new Date().toISOString()
+                            };
+
+                            // Store payment
+                            if (!this.payments.has(loanId)) {
+                                this.payments.set(loanId, []);
+                            }
+                            this.payments.get(loanId).push(payment);
+
+                            // Update loan balance
+                            loan.amount_paid += payment.amount;
+                            loan.balance_amount = Math.max(0, loan.total_amount - loan.amount_paid);
+
+                            // Calculate remaining EMIs
+                            const emisLeft = loan.balance_amount > 0 ?
+                                Math.ceil(loan.balance_amount / loan.monthly_emi) : 0;
+
+                            if (loan.balance_amount <= 0) {
+                                loan.status = 'PAID_OFF';
+                            }
+
+                            resolve({
+                                payment_id: paymentId,
+                                loan_id: loanId,
+                                message: 'Payment recorded successfully.',
+                                remaining_balance: loan.balance_amount,
+                                emis_left: emisLeft
+                            });
+                        } catch (error) {
+                            reject({
+                                error: 'Failed to process payment',
+                                details: error.message
+                            });
+                        }
+                    }, 500);
+                });
+            }
+
+            async getLedger(loanId) {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        try {
+                            const loan = this.loans.get(loanId);
+                            if (!loan) {
+                                reject({
+                                    error: 'Loan not found',
+                                    status: 404
+                                });
+                                return;
+                            }
+
+                            const payments = this.payments.get(loanId) || [];
+                            const transactions = payments.map(payment => ({
+                                transaction_id: payment.payment_id,
+                                date: payment.payment_date,
+                                amount: payment.amount,
+                                type: payment.payment_type
+                            }));
+
+                            const emisLeft = loan.balance_amount > 0 ?
+                                Math.ceil(loan.balance_amount / loan.monthly_emi) : 0;
+
+                            resolve({
+                                loan_id: loanId,
+                                customer_id: loan.customer_id,
+                                principal: loan.principal_amount,
+                                total_amount: loan.total_amount,
+                                monthly_emi: loan.monthly_emi,
+                                amount_paid: loan.amount_paid,
+                                balance_amount: loan.balance_amount,
+                                emis_left: emisLeft,
+                                status: loan.status,
+                                created_at: loan.created_at,
+                                transactions
+                            });
+                        } catch (error) {
+                            reject({
+                                error: 'Failed to get ledger',
+                                details: error.message
+                            });
+                        }
+                    }, 500);
+                });
+            }
+
+            async getCustomerOverview(customerId) {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        try {
+                            const customerLoans = Array.from(this.loans.values())
+                                .filter(loan => loan.customer_id === customerId);
+
+                            if (customerLoans.length === 0) {
+                                reject({
+                                    error: 'No loans found for customer',
+                                    status: 404
+                                });
+                                return;
+                            }
+
+                            const loans = customerLoans.map(loan => {
+                                const emisLeft = loan.balance_amount > 0 ?
+                                    Math.ceil(loan.balance_amount / loan.monthly_emi) : 0;
+
+                                return {
+                                    loan_id: loan.loan_id,
+                                    principal: loan.principal_amount,
+                                    total_amount: loan.total_amount,
+                                    total_interest: loan.total_interest,
+                                    emi_amount: loan.monthly_emi,
+                                    amount_paid: loan.amount_paid,
+                                    balance_amount: loan.balance_amount,
+                                    emis_left: emisLeft,
+                                    status: loan.status,
+                                    created_at: loan.created_at
+                                };
+                            });
+
+                            resolve({
+                                customer_id: customerId,
+                                total_loans: loans.length,
+                                loans
+                            });
+                        } catch (error) {
+                            reject({
+                                error: 'Failed to get customer overview',
+                                details: error.message
+                            });
+                        }
+                    }, 500);
+                });
+            }
+        }
+
+        // Initialize API
+        const api = new BankLendingAPI();
+
+        // UI Helper Functions
+        function showLoading(containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Processing your request...</p>
+                </div>
+            `;
+        }
+
+        function showAlert(containerId, message, type = 'info') {
+            const container = document.getElementById(containerId);
+            container.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-IN', {
+                style: 'currency',
+                currency: 'INR',
+                minimumFractionDigits: 2
+            }).format(amount);
+        }
+
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('en-IN', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Tab switching function
+        function switchTab(tabId) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Remove active class from all tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(tabId).classList.add('active');
+
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+
+            // Clear results when switching tabs
+            clearResults();
+        }
+
+        function clearResults() {
+            const resultContainers = ['loan-result', 'payment-result', 'ledger-result', 'overview-result'];
+            resultContainers.forEach(id => {
+                const container = document.getElementById(id);
+                if (container) container.innerHTML = '';
+            });
+        }
+
+        // Form handlers
+        document.getElementById('create-loan-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            showLoading('loan-result');
+
+            const formData = new FormData(this);
+            const loanData = Object.fromEntries(formData);
+
+            try {
+                const result = await api.createLoan(loanData);
+                const calculations = api.calculateLoanDetails(
+                    parseFloat(loanData.loan_amount),
+                    parseInt(loanData.loan_period_years),
+                    parseFloat(loanData.interest_rate_yearly)
+                );
+
+                document.getElementById('loan-result').innerHTML = `
+                    <div class="alert alert-success">Loan created successfully!</div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number">${result.loan_id}</div>
+                            <div class="stat-label">Loan ID</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${formatCurrency(result.total_amount_payable)}</div>
+                            <div class="stat-label">Total Payable</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${formatCurrency(result.monthly_emi)}</div>
+                            <div class="stat-label">Monthly EMI</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${formatCurrency(calculations.totalInterest)}</div>
+                            <div class="stat-label">Total Interest</div>
+                        </div>
+                    </div>
+                `;
+                this.reset();
+            } catch (error) {
+                showAlert('loan-result', `Error: ${error.error || error.message}`, 'error');
+            }
+        });
+
+        document.getElementById('payment-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            showLoading('payment-result');
+
+            const formData = new FormData(this);
+            const loanId = formData.get('loan_id');
+            const paymentData = {
+                amount: formData.get('amount'),
+                payment_type: formData.get('payment_type')
+            };
+
+            try {
+                const result = await api.makePayment(loanId, paymentData);
+                document.getElementById('payment-result').innerHTML = `
+                    <div class="alert alert-success">${result.message}</div>
+                    <div class="grid">
+                        <div class="card">
+                            <h3>Payment Details</h3>
+                            <p><strong>Payment ID:</strong> ${result.payment_id}</p>
+                            <p><strong>Amount:</strong> ${formatCurrency(parseFloat(paymentData.amount))}</p>
+                            <p><strong>Type:</strong> ${paymentData.payment_type}</p>
+                        </div>
+                        <div class="card">
+                            <h3>Loan Status</h3>
+                            <p><strong>Remaining Balance:</strong> <span class="amount ${result.remaining_balance > 0 ? 'warning' : 'success'}">${formatCurrency(result.remaining_balance)}</span></p>
+                            <p><strong>EMIs Left:</strong> ${result.emis_left}</p>
+                        </div>
+                    </div>
+                `;
+                this.reset();
+            } catch (error) {
+                showAlert('payment-result', `Error: ${error.error || error.message}`, 'error');
+            }
+        });
+
+        document.getElementById('ledger-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            showLoading('ledger-result');
+
+            const formData = new FormData(this);
+            const loanId = formData.get('loan_id');
+
+            try {
+                const result = await api.getLedger(loanId);
+
+                let transactionsHtml = '';
+                if (result.transactions && result.transactions.length > 0) {
+                    transactionsHtml = `
+                        <h3>Transaction History</h3>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Transaction ID</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${result.transactions.map(txn => `
+                                    <tr>
+                                        <td>${txn.transaction_id}</td>
+                                        <td>${formatDate(txn.date)}</td>
+                                        <td>${formatCurrency(txn.amount)}</td>
+                                        <td><span class="badge ${txn.type === 'EMI' ? 'info' : 'warning'}">${txn.type}</span></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                } else {
+                    transactionsHtml = `
+                        <div class="alert alert-info">
+                            <strong>No transactions found</strong><br>
+                            No payments have been made for this loan yet.
+                        </div>
+                    `;
+                }
+
+                const progressPercentage = ((result.amount_paid / result.total_amount) * 100).toFixed(1);
+
+                document.getElementById('ledger-result').innerHTML = `
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number">${result.loan_id}</div>
+                            <div class="stat-label">Loan ID</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${formatCurrency(result.principal)}</div>
+                            <div class="stat-label">Principal Amount</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${formatCurrency(result.monthly_emi)}</div>
+                            <div class="stat-label">Monthly EMI</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${result.emis_left}</div>
+                            <div class="stat-label">EMIs Left</div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid">
+                        <div class="card">
+                            <h3>Loan Summary</h3>
+                            <p><strong>Customer ID:</strong> ${result.customer_id}</p>
+                            <p><strong>Total Amount:</strong> ${formatCurrency(result.total_amount)}</p>
+                            <p><strong>Status:</strong> <span class="badge ${result.status === 'PAID_OFF' ? 'success' : 'info'}">${result.status}</span></p>
+                            <p><strong>Created:</strong> ${formatDate(result.created_at)}</p>
+                        </div>
+                        <div class="card">
+                            <h3>Payment Progress</h3>
+                            <p><strong>Amount Paid:</strong> <span class="amount success">${formatCurrency(result.amount_paid)}</span></p>
+                            <p><strong>Balance:</strong> <span class="amount ${result.balance_amount > 0 ? 'warning' : 'success'}">${formatCurrency(result.balance_amount)}</span></p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${progressPercentage}%"></div>
+                            </div>
+                            <p style="text-align: center; margin-top: 5px;">${progressPercentage}% Complete</p>
+                        </div>
+                    </div>
+                    
+                    ${transactionsHtml}
+                `;
+            } catch (error) {
+                showAlert('ledger-result', `Error: ${error.error || error.message}`, 'error');
+            }
+        });
+
+        document.getElementById('overview-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            showLoading('overview-result');
+
+            const formData = new FormData(this);
+            const customerId = formData.get('customer_id');
+
+            try {
+                const result = await api.getCustomerOverview(customerId);
+
+                let totalPrincipal = 0;
+                let totalPaid = 0;
+                let totalBalance = 0;
+
+                const loansHtml = result.loans.map(loan => {
+                    totalPrincipal += loan.principal;
+                    totalPaid += loan.amount_paid;
+                    totalBalance += loan.balance_amount;
+
+                    const progressPercentage = ((loan.amount_paid / loan.total_amount) * 100).toFixed(1);
+
+                    return `
+                        <div class="card">
+                            <h3>Loan ID: ${loan.loan_id}</h3>
+                            <p><strong>Principal:</strong> ${formatCurrency(loan.principal)}</p>
+                            <p><strong>Total Amount:</strong> ${formatCurrency(loan.total_amount)}</p>
+                            <p><strong>Monthly EMI:</strong> ${formatCurrency(loan.emi_amount)}</p>
+                            <p><strong>Amount Paid:</strong> <span class="success">${formatCurrency(loan.amount_paid)}</span></p>
+                            <p><strong>Balance:</strong> <span class="${loan.balance_amount > 0 ? 'warning' : 'success'}">${formatCurrency(loan.balance_amount)}</span></p>
+                            <p><strong>EMIs Left:</strong> ${loan.emis_left}</p>
+                            <p><strong>Status:</strong> <span class="badge ${loan.status === 'PAID_OFF' ? 'success' : 'info'}">${loan.status}</span></p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${progressPercentage}%"></div>
+                            </div>
+                            <p style="text-align: center; margin-top: 5px;">${progressPercentage}% Complete</p>
+                            <p><strong>Created:</strong> ${formatDate(loan.created_at)}</p>
+                        </div>
+                    `;
+                }).join('');
+
+                document.getElementById('overview-result').innerHTML = `
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number">${result.customer_id}</div>
+                            <div class="stat-label">Customer ID</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${result.total_loans}</div>
+                            <div class="stat-label">Total Loans</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${formatCurrency(totalPrincipal)}</div>
+                            <div class="stat-label">Total Principal</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${formatCurrency(totalBalance)}</div>
+                            <div class="stat-label">Total Balance</div>
+                        </div>
+                    </div>
+                    
+                    <h3>Loan Details</h3>
+                    <div class="grid">
+                        ${loansHtml}
+                    </div>
+                `;
+            } catch (error) {
+                showAlert('overview-result', `Error: ${error.error || error.message}`, 'error');
+            }
+        });
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Bank Lending System initialized successfully!');
+            console.log('Sample Customer IDs available: CUST001, CUST002');
+        });
+    </script>
+</body>
+
+</html>
