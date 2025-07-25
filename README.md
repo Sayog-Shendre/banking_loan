@@ -230,7 +230,7 @@ See the [LICENSE](LICENSE) file for more details.
 **Sayog Shendre**  
 - GitHub: [@Sayog-Shendre](https://github.com/Sayog-Shendre)  
 - LinkedIn: [Sayog Shendre](https://linkedin.com/in/sayog-shendre)  
-- Email: sayog.shendre@example.com
+- Email: sayogshendre6838@gmail.com
 
 ## 🔮 Future Enhancements
 
