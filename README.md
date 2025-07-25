@@ -173,12 +173,7 @@ Body: 1rem regular
 | Edge    | ✅        |
 | IE 11   | ⚠️ Limited |
 
-## 📸 Screenshots
 
-![Create Loan](https://via.placeholder.com/800x400/667eea/ffffff?text=Create+Loan+Interface)  
-![Make Payment](https://via.placeholder.com/800x400/74b9ff/ffffff?text=Payment+Processing)  
-![Loan Ledger](https://via.placeholder.com/800x400/00b894/ffffff?text=Loan+Ledger+View)  
-![Customer Overview](https://via.placeholder.com/800x400/fdcb6e/ffffff?text=Customer+Overview)
 
 ## 🧪 Testing
 
